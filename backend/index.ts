@@ -1,13 +1,14 @@
 // Require the framework and instantiate it
 const fastify = require('fastify')({ logger: true })
-const cors = require('@fastify/cors')
-const {task} =require('../types')
+import cors from '@fastify/cors'
+import { task } from '../types/index'
 
 // Declare a route
 fastify.register(cors,{
   origin:true
 })
-fastify.get('/', async (request, reply) => {
+fastify.get('/', async ( reply:any) => {
+  let response: task={Objectkey:"abcd",suject:"WINFO"}
   reply.send({ hello: 'world' })
 })
 
