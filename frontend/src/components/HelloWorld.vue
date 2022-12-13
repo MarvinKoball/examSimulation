@@ -123,6 +123,9 @@ export default class HelloWorld extends Vue {
 
   created() {
     console.log("HelloWorld created");
+    fetch("http://localhost:3000/").then(async (response) => {
+      console.log(await response.json());
+    });
   }
 }
 </script>
