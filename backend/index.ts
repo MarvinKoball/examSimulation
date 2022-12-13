@@ -1,6 +1,7 @@
 // Require the framework and instantiate it
 const fastify = require('fastify')({ logger: true })
 const cors = require('@fastify/cors')
+const {task} =require('../types')
 
 // Declare a route
 fastify.register(cors,{
