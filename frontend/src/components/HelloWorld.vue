@@ -112,6 +112,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import { task } from "../../../types/index";
 
 @Options({
   props: {

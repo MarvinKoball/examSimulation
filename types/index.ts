@@ -1,5 +1,5 @@
 interface task{
     Objectkey: string;
-    suject: string;
+    subject: string;
 }
 export{task}

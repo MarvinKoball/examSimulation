@@ -4,11 +4,14 @@ import cors from '@fastify/cors'
 import { task } from '../types/index'
 
 // Declare a route
+
+//dont forget: tsc -w :)
 fastify.register(cors,{
   origin:true
 })
 fastify.get('/', async ( reply:any) => {
-  let response: task={Objectkey:"abcd",suject:"WINFO"}
+  let response: task={Objectkey:"abcd",subject:"WINFO"}
+  let favSubject=response.subject
   reply.send({ hello: 'world' })
 })
 
