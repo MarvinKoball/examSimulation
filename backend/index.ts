@@ -22,15 +22,15 @@ server.get('/', async ( request, reply) => {
 }) 
 server.post('/add',async (request, reply) => {
 console.log(request.body)
-const test: task=<task>request.body;
-reply.send(test);
+const test: object=<object>request.body;
+
 let jsonConvert:JsonConvert=new JsonConvert();
-let testT:addTaskDao=jsonConvert.deserializeObject(request.body,addTaskDao)
+let testT:addTaskDao=jsonConvert.deserializeObject(test,addTaskDao)
 console.log(testT);
-console.log(test.subject);
+
 
 //server.pg.query('INSERT INTO tasks VALUES ($1, $2)', [9,test.subject])
-
+reply.send(test);
 
   
 })                

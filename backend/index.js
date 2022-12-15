@@ -24,12 +24,11 @@ server.get('/', async (request, reply) => {
 server.post('/add', async (request, reply) => {
     console.log(request.body);
     const test = request.body;
-    reply.send(test);
     let jsonConvert = new json2typescript_1.JsonConvert();
-    let testT = jsonConvert.deserializeObject(request.body, addTaskDao_1.addTaskDao);
+    let testT = jsonConvert.deserializeObject(test, addTaskDao_1.addTaskDao);
     console.log(testT);
-    console.log(test.subject);
     //server.pg.query('INSERT INTO tasks VALUES ($1, $2)', [9,test.subject])
+    reply.send(test);
 });
 // Run the server! 
 const start = async () => {
