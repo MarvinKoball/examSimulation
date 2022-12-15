@@ -1,10 +1,15 @@
 # Use postgres/example user/password credentials
+#docker-compose up/down
+#user:postgres
 version: "3.1"
 
 services:
   db:
+    container_name: "psql"
     image: postgres
     restart: always
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_PASSWORD: mysecretpassword
     volumes:
