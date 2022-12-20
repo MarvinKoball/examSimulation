@@ -68,12 +68,12 @@ export default class AddTaskForm extends Vue {
   }
   async uploadTask() {
     //console.log(this.testTask);
-    await fetch("http://localhost:3000/add", {
+    const result = await fetch("http://localhost:3000/add", {
+      headers: { "Content-Type": "application/json" },
       method: "POST",
       body: JSON.stringify(this.testTask),
-    }).then(async (response) => {
-      console.log(await response.json());
     });
+    console.log(result.json());
   }
 }
 </script>

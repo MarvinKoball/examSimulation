@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "start": "node index.js"
+    "start": "nodemon build/backend/src/index.js",
+    "typeorm": "typeorm-ts-node-commonjs"
   },
   "author": "",
   "license": "ISC",
@@ -14,11 +15,15 @@
     "fastify": "^4.10.2",
     "json2typescript": "^1.5.1",
     "nodemon": "^2.0.20",
-    "pg": "^8.8.0"
+    "pg": "^8.4.0",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "0.3.11"
   },
   "devDependencies": {
-    "@types/node": "^18.11.15",
-    "typescript": "^4.9.4"
+    "@types/node": "^16.11.10",
+    "@types/pg": "^8.6.5",
+    "typescript": "4.5.2",
+    "ts-node": "10.7.0"
   },
   "keywords": [],
   "description": ""
