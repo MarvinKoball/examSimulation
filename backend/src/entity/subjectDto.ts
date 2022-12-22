@@ -15,15 +15,17 @@ export class subjectDto {
         
       }
 
-    public static async checkedSubject(subjectToCheck:subjectDto){
+    public static async checkedSubject(subjectToCheck:subjectDto):Promise<subjectDto>{
         const subjectRepository = AppDataSource.getRepository(subjectDto)
         const olSubject =await AppDataSource.manager.findOne(subjectDto,{where:{subject:subjectToCheck.subject}});
         if (null==olSubject){
         await subjectRepository.insert(subjectToCheck);
+        subjectToCheck =await AppDataSource.manager.findOne(subjectDto,{where:{subject:subjectToCheck.subject}})
         }
         else{
             subjectToCheck=olSubject;
         }
+        return subjectToCheck
       }
 
 }

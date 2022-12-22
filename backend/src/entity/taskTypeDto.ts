@@ -14,14 +14,16 @@ export class taskTypeDto {
         this.taskType = data;
       }
 
-      public static async checkedtaskType(taskTypeToCheck:taskTypeDto){
+      public static async checkedtaskType(taskTypeToCheck:taskTypeDto):Promise<taskTypeDto>{
         const taskTypeRepository = AppDataSource.getRepository(taskTypeDto)
         const oldTaskType =await AppDataSource.manager.findOne(taskTypeDto,{where:{taskType:taskTypeToCheck.taskType}});
         if (null==oldTaskType){
         await taskTypeRepository.insert(taskTypeToCheck);
+        taskTypeToCheck=await AppDataSource.manager.findOne(taskTypeDto,{where:{taskType:taskTypeToCheck.taskType}})
         }
         else{
             taskTypeToCheck=oldTaskType;
         }
+        return taskTypeToCheck;
       }      
 }

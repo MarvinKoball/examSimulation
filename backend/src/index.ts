@@ -29,19 +29,16 @@ AppDataSource.initialize().then(async () => {
   const firstTask=new taskDto();
   const taskRepository = AppDataSource.getRepository(taskDto)
  
-
-  let Subject =new subjectDto("WInfo"); subjectDto.checkedSubject(Subject);  
-  firstTask.subject=Subject;
-  let TaskType=new taskTypeDto("x aus n"); taskTypeDto.checkedtaskType(TaskType)
-  firstTask.taskType=TaskType;
-
-//todo: 
   let Section =await sectionDto.checkedSection(new sectionDto("Informationsmanagement5"));
   firstTask.section=Section;
-  let Exam =new examDto("WS1617"); examDto.checkedExam(Exam);
+  let Exam =await examDto.checkedExam(new examDto("WS1618"));
   firstTask.exam=Exam;
+  let Subject =await subjectDto.checkedSubject(new subjectDto("WInfo") );  
+  firstTask.subject=Subject;
+  let TaskType=await taskTypeDto.checkedtaskType(new taskTypeDto("x aus n"))
+  firstTask.taskType=TaskType;
   firstTask.statement="Wissen entsteht aus Daten, die in Bezug auf einen Verwendungszweck aufbereitet werden. Der Kontext spielt dabei eine untergeordnete Rolle."
-  firstTask.isCorrect=false;
+  firstTask.isCorrect=false; 
   
   await taskRepository.insert(firstTask)
   console.log("Saved a new task with id: " + firstTask.id)

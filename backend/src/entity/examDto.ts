@@ -12,15 +12,16 @@ export class examDto {
     constructor(data: string) {
         this.exam = data;
       }
-      public static async checkedExam(examToCheck:examDto){
+      public static async checkedExam(examToCheck:examDto):Promise<examDto>{
         const examRepository = AppDataSource.getRepository(examDto)
         const oldExam =await AppDataSource.manager.findOne(examDto,{where:{exam:examToCheck.exam}});
         if (null==oldExam){
         await examRepository.insert(examToCheck);
+          examToCheck= await AppDataSource.manager.findOne(examDto,{where:{exam:examToCheck.exam}});
         }
         else{
             examToCheck=oldExam;
         }
-
+        return examToCheck;
       }
 }
