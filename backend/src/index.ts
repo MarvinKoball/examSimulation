@@ -4,6 +4,16 @@ import postgres from "@fastify/postgres";
 import { task } from "../../types/index";
 import "reflect-metadata";
 import { AppDataSource } from "./data-source";
+import { addCodeArg } from "ajv/dist/compile/codegen/code";
+import { taskDto } from "./entity/taskDto";
+import { subjectDto } from "./entity/subjectDto";
+import { sectionDto } from "./entity/sectionDto";
+import { examDto } from "./entity/examDto";
+import { taskTypeDto } from "./entity/taskTypeDto";
+import { SaveOptions, UpdateResult } from "typeorm";
+import { resolve } from "path";
+import { rejects } from "assert";
+
 
 //dont forget: tsc -w :)
 const server = fastify();
@@ -15,8 +25,40 @@ server.register(postgres, {
     "postgres://postgres:mysecretpassword@0.0.0.0:5432/postgres",
 });
 AppDataSource.initialize().then(async () => {
-  console.log("intialized");
-}).catch((err)=>{console.log("err")});
+  console.log("Inserting a new task into the database...");
+  const firstTask=new taskDto();
+  const taskRepository = AppDataSource.getRepository(taskDto)
+ 
+
+/*   const taskRepository = AppDataSource.getRepository(taskDto)
+  const options:SaveOptions={reload:false,  transaction:false}
+
+  const subjectRepository = AppDataSource.getRepository(subjectDto)
+  let newSubject =new subjectDto("WInfo");
+  const olSubject =await AppDataSource.manager.findOne(subjectDto,{where:{subject:newSubject.subject}});
+  if (null==olSubject){
+  await subjectRepository.insert(newSubject);
+  }
+  else{
+    newSubject=olSubject;
+  } */
+  let Subject =new subjectDto("WInfo"); subjectDto.checkedSubject(Subject);  
+  firstTask.subject=Subject;
+  let TaskType=new taskTypeDto("x aus n"); taskTypeDto.checkedtaskType(TaskType)
+  firstTask.taskType=TaskType;
+
+
+  let Section =await sectionDto.checkedSection(new sectionDto("Informationsmanagement5"));
+  firstTask.section=Section;
+  let Exam =new examDto("WS1617"); examDto.checkedExam(Exam);
+  firstTask.exam=Exam;
+  firstTask.statement="Wissen entsteht aus Daten, die in Bezug auf einen Verwendungszweck aufbereitet werden. Der Kontext spielt dabei eine untergeordnete Rolle."
+  firstTask.isCorrect=false;
+  
+  await taskRepository.insert(firstTask)
+  console.log("Saved a new task with id: " + firstTask.id)
+  console.log("intialized"); 
+}).catch((err)=>{console.log(err.message)});
 
 server.get("/", async (request, reply) => {
   reply.send({ hello: "worlds" });
@@ -24,7 +66,6 @@ server.get("/", async (request, reply) => {
 
 server.post("/add", async (request, reply) => {
   let taskbody: task = <task>request.body;
-
 
   // hier kommen daten aus dem frontend an
 
@@ -35,7 +76,6 @@ server.post("/add", async (request, reply) => {
   const client = await server.pg.connect();
   try {
     const { rows } = await client.query("INSERT INTO tasks VALUES ($1, $2)", [
-      taskbody.Objectkey,
       taskbody.subject,
     ]);
     console.log("rows");
