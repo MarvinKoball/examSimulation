@@ -30,24 +30,12 @@ AppDataSource.initialize().then(async () => {
   const taskRepository = AppDataSource.getRepository(taskDto)
  
 
-/*   const taskRepository = AppDataSource.getRepository(taskDto)
-  const options:SaveOptions={reload:false,  transaction:false}
-
-  const subjectRepository = AppDataSource.getRepository(subjectDto)
-  let newSubject =new subjectDto("WInfo");
-  const olSubject =await AppDataSource.manager.findOne(subjectDto,{where:{subject:newSubject.subject}});
-  if (null==olSubject){
-  await subjectRepository.insert(newSubject);
-  }
-  else{
-    newSubject=olSubject;
-  } */
   let Subject =new subjectDto("WInfo"); subjectDto.checkedSubject(Subject);  
   firstTask.subject=Subject;
   let TaskType=new taskTypeDto("x aus n"); taskTypeDto.checkedtaskType(TaskType)
   firstTask.taskType=TaskType;
 
-
+//todo: 
   let Section =await sectionDto.checkedSection(new sectionDto("Informationsmanagement5"));
   firstTask.section=Section;
   let Exam =new examDto("WS1617"); examDto.checkedExam(Exam);

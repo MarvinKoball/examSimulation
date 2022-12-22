@@ -16,12 +16,12 @@
           "
         >
           <div class="form-group">
-            <label for="Objectkey">Object-key:</label>
+            <label for="Objectkey">section:</label>
             <input
               type="Objectkey"
               class="form-control"
               id="Objectkey"
-              v-model="testTask.Objectkey"
+              v-model="testTask.section"
             />
           </div>
           <div class="form-group">
@@ -58,7 +58,14 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 })
 export default class AddTaskForm extends Vue {
   msg!: string;
-  testTask: task = { Objectkey: "", subject: "" };
+  testTask: task = {
+    section: "",
+    subject: "",
+    statement: "",
+    exam: "",
+    taskType: "",
+    isCorrect: false,
+  };
 
   created() {
     console.log("AddTaskForm created");

@@ -2,7 +2,7 @@ interface task{
     subject: string;
     statement:string;
     exam:string;
-    taskTye:string;
+    taskType:string;
     section:string;
     isCorrect: boolean;
 }
