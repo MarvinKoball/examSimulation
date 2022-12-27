@@ -5,5 +5,6 @@ interface task{
     taskType:string;
     section:string;
     isCorrect: boolean;
+    isSelected?: boolean;
 }
 export{task}
