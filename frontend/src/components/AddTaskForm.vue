@@ -1,8 +1,7 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
     <p></p>
-    <h3>Upload task</h3>
+    <h1>Upload task</h1>
     <br />
     <ul>
       <li>
@@ -81,17 +80,12 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { Vue } from "vue-class-component";
 import { task } from "../../../types/index";
-import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+//import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 
-@Options({
-  props: {
-    msg: String,
-  },
-})
 export default class AddTaskForm extends Vue {
   testTask: task = {
     section: "",
