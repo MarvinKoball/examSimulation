@@ -22,9 +22,40 @@ server.register(cors, {
 });
 server.register(postgres, {
   connectionString:
-    "postgres://postgres:mysecretpassword@0.0.0.0:5432/postgres",
+    "postgres://postgres:mysecretpassword@0.0.0.0:5432/postgres", 
 });
-AppDataSource.initialize().then(async () => {
+
+
+server.get("/", async (request, reply) => {
+  reply.send({ hello: "worlds" });
+});
+
+server.post("/add", async (request, reply) => {
+  let taskbody: task = <task>request.body;
+
+taskDto.addNewTaskToDb(taskbody);
+
+  
+
+})
+
+
+// Run the server!
+const start = async () => {
+  try {
+    await server.listen({ port: 3000 });
+    AppDataSource.initialize().then(()=>{console.log("intialized")}).catch((err)=>{console.log(err.message)}); 
+  } catch (err) {
+    server.log.error(err);
+    process.exit(1);
+  }
+};
+start();
+
+
+
+//old
+/* AppDataSource.initialize().then(async () => {
   console.log("Inserting a new task into the database...");
   const firstTask=new taskDto();
   const taskRepository = AppDataSource.getRepository(taskDto)
@@ -45,19 +76,7 @@ AppDataSource.initialize().then(async () => {
   console.log("intialized"); 
 }).catch((err)=>{console.log(err.message)});
 
-server.get("/", async (request, reply) => {
-  reply.send({ hello: "worlds" });
-});
-
-server.post("/add", async (request, reply) => {
-  let taskbody: task = <task>request.body;
-
-  // hier kommen daten aus dem frontend an
-
-  // -> hier will ich orm ansprechen mit orm.newEntry(neue Daten)
-
-  // danach return erst mal true oder die ID von dem erstellten Objekt
-  
+super old
   const client = await server.pg.connect();
   try {
     const { rows } = await client.query("INSERT INTO tasks VALUES ($1, $2)", [
@@ -68,15 +87,4 @@ server.post("/add", async (request, reply) => {
   } catch {
     reply.send({ message: "error" });
   }
-});
-
-// Run the server!
-const start = async () => {
-  try {
-    await server.listen({ port: 3000 });
-  } catch (err) {
-    server.log.error(err);
-    process.exit(1);
-  }
-};
-start();
+}); */

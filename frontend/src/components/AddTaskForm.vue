@@ -16,14 +16,24 @@
           "
         >
           <div class="form-group">
-            <label for="Objectkey">section:</label>
+            <label for="exam">exam:</label>
             <input
-              type="Objectkey"
+              type="exam"
               class="form-control"
-              id="Objectkey"
+              id="exam"
+              v-model="testTask.exam"
+            />
+          </div>
+          <div class="form-group">
+            <label for="section">section:</label>
+            <input
+              type="section"
+              class="form-control"
+              id="section"
               v-model="testTask.section"
             />
           </div>
+
           <div class="form-group">
             <label for="subject">subject:</label>
             <input
@@ -33,11 +43,37 @@
               v-model="testTask.subject"
             />
           </div>
+          <div class="form-group">
+            <label for="taskType">taskType:</label>
+            <input
+              type="taskType"
+              class="form-control"
+              id="taskType"
+              v-model="testTask.taskType"
+            />
+          </div>
+          <div class="form-group">
+            <label for="statement">statement:</label>
+            <input
+              type="statement"
+              class="form-control"
+              id="statement"
+              v-model="testTask.statement"
+            />
+          </div>
+          <div class="form-check form-switch">
+            <label for="flexSwitchCheckDefault">isCorrect:</label>
+            <input
+              type="checkbox"
+              id="flexSwitchCheckDefault"
+              class="form-check-input"
+              v-model="testTask.isCorrect"
+            />
+          </div>
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>
       </li>
     </ul>
-    <h3>Ecosystem</h3>
     <ul>
       <li></li>
     </ul>
@@ -57,7 +93,6 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
   },
 })
 export default class AddTaskForm extends Vue {
-  msg!: string;
   testTask: task = {
     section: "",
     subject: "",
