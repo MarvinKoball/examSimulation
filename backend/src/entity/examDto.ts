@@ -16,9 +16,8 @@ export class examDto {
         const examRepository = AppDataSource.getRepository(examDto)
         const oldExam =await AppDataSource.manager.findOne(examDto,{where:{exam:examToCheck.exam}});
         if (null==oldExam){
-        await examRepository.insert(examToCheck);
-          examToCheck= await AppDataSource.manager.findOne(examDto,{where:{exam:examToCheck.exam}});
-        }
+        examToCheck=await examRepository.save(examToCheck);
+         }
         else{
             examToCheck=oldExam;
         }

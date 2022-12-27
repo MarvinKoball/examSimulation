@@ -18,9 +18,8 @@ export class taskTypeDto {
         const taskTypeRepository = AppDataSource.getRepository(taskTypeDto)
         const oldTaskType =await AppDataSource.manager.findOne(taskTypeDto,{where:{taskType:taskTypeToCheck.taskType}});
         if (null==oldTaskType){
-        await taskTypeRepository.insert(taskTypeToCheck);
-        taskTypeToCheck=await AppDataSource.manager.findOne(taskTypeDto,{where:{taskType:taskTypeToCheck.taskType}})
-        }
+        taskTypeToCheck = await taskTypeRepository.save(taskTypeToCheck);
+         }
         else{
             taskTypeToCheck=oldTaskType;
         }

@@ -19,8 +19,8 @@ export class subjectDto {
         const subjectRepository = AppDataSource.getRepository(subjectDto)
         const olSubject =await AppDataSource.manager.findOne(subjectDto,{where:{subject:subjectToCheck.subject}});
         if (null==olSubject){
-        await subjectRepository.insert(subjectToCheck);
-        subjectToCheck =await AppDataSource.manager.findOne(subjectDto,{where:{subject:subjectToCheck.subject}})
+        subjectToCheck =await subjectRepository.save(subjectToCheck);
+        //subjectToCheck =await AppDataSource.manager.findOne(subjectDto,{where:{subject:subjectToCheck.subject}})
         }
         else{
             subjectToCheck=olSubject;

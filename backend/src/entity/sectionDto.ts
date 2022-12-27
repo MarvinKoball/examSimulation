@@ -18,9 +18,8 @@ export class sectionDto {
         const subjectRepository = AppDataSource.getRepository(sectionDto)
         const oldSection =await AppDataSource.manager.findOne(sectionDto,{select:{id:true, section:true},where:{section:sectionToCheck.section}});
         if (null==oldSection){
-         await (subjectRepository.insert(sectionToCheck));
-         sectionToCheck= await AppDataSource.manager.findOne(sectionDto,{select:{id:true, section:true},where:{section:sectionToCheck.section}});
-        }
+         sectionToCheck=await (subjectRepository.save(sectionToCheck));
+         }
         else{
             sectionToCheck=oldSection;
         }

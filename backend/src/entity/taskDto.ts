@@ -36,7 +36,7 @@ export class taskDto {
     @Column()
     public isCorrect: boolean
 
-    public static async addNewTaskToDb(taskToAdd:task){
+    public static async addNewTaskToDb(taskToAdd:task):Promise<taskDto>{
 
         console.log("Inserting a new task into the database...");
         const newTaskDto=new taskDto();
@@ -55,7 +55,7 @@ export class taskDto {
 
         await taskRepository.save(newTaskDto)
          console.log("Saved a new task with id: " + newTaskDto.id)
-         
+       return newTaskDto;  
 }       
 
     

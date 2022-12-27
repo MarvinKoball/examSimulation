@@ -33,9 +33,9 @@ server.get("/", async (request, reply) => {
 server.post("/add", async (request, reply) => {
   let taskbody: task = <task>request.body;
 
-taskDto.addNewTaskToDb(taskbody);
+let newTask=taskDto.addNewTaskToDb(taskbody);
 
-  
+reply.send({"message":"Saved a new task with id: "+(await newTask).id})
 
 })
 
