@@ -127,7 +127,7 @@ export default class AddTaskForm extends Vue {
       //this.testTask.pictureStream = "";
     });
   }
-  setPicture(event: InputEvent): void {
+  setPicture(){
     const file = (this.$refs.fileInput as HTMLInputElement).files![0];
     console.log(file);
     
