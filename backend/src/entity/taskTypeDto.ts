@@ -10,6 +10,7 @@ export class taskTypeDto {
     @Column()
     public taskType: string
 
+
     constructor(data: string) {
         this.taskType = data;
       }

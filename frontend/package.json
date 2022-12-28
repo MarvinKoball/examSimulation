@@ -11,6 +11,7 @@
     "bootstrap": "^3.4.1",
     "bootstrap-vue": "^2.23.1",
     "core-js": "^3.8.3",
+    "filereader": "^0.10.3",
     "vue": "^3.2.45",
     "vue-class-component": "^8.0.0-0",
     "vue-router": "^4.0.3",

@@ -61,10 +61,31 @@
             />
           </div>
           <div class="form-check form-switch">
-            <label for="flexSwitchCheckDefault">isCorrect:</label>
+            <label for="flexSwitchCheckDefault">hasPicture:</label>
             <input
               type="checkbox"
               id="flexSwitchCheckDefault"
+              class="form-check-input"
+              v-model="hasPicture"
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="file"
+              class="form-control"
+              id="picture"
+              accept="image/png, image/jpg"
+              ref="fileInput"
+              v-show="hasPicture"
+              @change="setPicture"
+              multiple
+            />
+          </div>
+          <div class="form-check form-switch">
+            <label for="flexSwitchCheckDefault">isCorrect:</label>
+            <input
+              type="checkbox"
+              id="isCorrect"
               class="form-check-input"
               v-model="testTask.isCorrect"
             />
@@ -80,13 +101,16 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 import { Vue } from "vue-class-component";
 import { task } from "../../../types/index";
 //import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+import { file } from "@babel/types";
 
 export default class AddTaskForm extends Vue {
+  hasPicture = false;
   testTask: task = {
     section: "",
     subject: "",
@@ -100,8 +124,24 @@ export default class AddTaskForm extends Vue {
     console.log("AddTaskForm created");
     fetch("http://localhost:3000/").then(async (response) => {
       console.log(await response.json());
+      //this.testTask.pictureStream = "";
     });
   }
+  setPicture(event: InputEvent): void {
+    const file = (this.$refs.fileInput as HTMLInputElement).files![0];
+    console.log(file);
+    
+
+      let reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload=()=>{
+        this.testTask.pictureStream=reader.result as string;
+        console.log(this.testTask);
+        
+      }
+      
+      }
+
   async uploadTask() {
     //console.log(this.testTask);
     const result = await fetch("http://localhost:3000/add", {

@@ -5,6 +5,7 @@ import {sectionDto} from "./sectionDto"
 import {taskTypeDto} from "./taskTypeDto"
 import { task } from "../../../types"
 import { AppDataSource } from "../data-source";
+import { pictureStreamDto } from "./picturestreamDto";
 
 
 
@@ -30,6 +31,10 @@ export class taskDto {
     @JoinColumn()
     public taskType: taskTypeDto
 
+    @ManyToOne(()=>pictureStreamDto, (pictureStreamDto)=>pictureStreamDto.pictureStream)
+    @JoinColumn()
+    public pictureStream: pictureStreamDto
+
     @Column()
     public statement: string
 
@@ -48,8 +53,12 @@ export class taskDto {
         newTaskDto.exam=Exam;
         let Subject =await subjectDto.checkedSubject(new subjectDto(taskToAdd.subject) );  
         newTaskDto.subject=Subject;
-        let TaskType=await taskTypeDto.checkedtaskType(new taskTypeDto(taskToAdd.taskType))
+        let TaskType=await taskTypeDto.checkedtaskType(new taskTypeDto(taskToAdd.taskType));
         newTaskDto.taskType=TaskType;
+        if(taskToAdd.pictureStream){
+        let PictureStream =await pictureStreamDto.checkedSection(new pictureStreamDto(taskToAdd.pictureStream));
+        newTaskDto.pictureStream=PictureStream;
+        }
         newTaskDto.statement=taskToAdd.statement;
         newTaskDto.isCorrect=taskToAdd.isCorrect; 
 

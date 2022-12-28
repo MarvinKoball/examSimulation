@@ -6,5 +6,6 @@ interface task{
     section:string;
     isCorrect: boolean;
     isSelected?: boolean;
-}
+    pictureStream?: string;
+} 
 export{task}
