@@ -165,7 +165,14 @@ function evaluate() {
     }
   });
   finishWithAllTask.value = true;
-  result = pointCounter + " out of " + maxPoints;
+  result =
+    pointCounter +
+    " out of " +
+    maxPoints +
+    " damit hast du " +
+    ((pointCounter / maxPoints) * 100).toFixed(2) +
+    " % erreicht und damit " +
+    ((pointCounter / maxPoints) * 100 > 50 ? "bestanden" : "nicht bestanden");
   console.log(pointCounter + " out of " + maxPoints);
 }
 </script>
