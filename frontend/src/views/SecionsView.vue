@@ -30,7 +30,7 @@
       <button
         v-if="
           currentPage <
-          Math.ceil(tasks.statements.length / tasks.itemsPerPage - 1)
+          Math.floor(tasks.statements.length / tasks.itemsPerPage - 1)
         "
         @click="nextPage"
         class="btn btn-primary"
@@ -40,7 +40,7 @@
       <button
         v-if="
           currentPage ==
-          Math.ceil(tasks.statements.length / tasks.itemsPerPage - 1)
+          Math.floor(tasks.statements.length / tasks.itemsPerPage - 1)
         "
         @click="evaluate"
         class="btn btn-warning"
@@ -56,124 +56,116 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { ref, computed, reactive } from "vue";
-import { Options, Vue } from "vue-class-component";
+<script lang="ts" setup>
+import { ref, reactive } from "vue";
+
 import { task, mapIntoTask, TaskList } from "../../../types";
 import selectSection from "../components/selectSection.vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 
-@Options({
-  components: { selectSection },
-})
-export default class SectionsView extends Vue {
-  loading = false;
-  error: any;
-  tasks: TaskList = {
-    statements: [],
-    itemsPerPage: 5,
-  };
-  currentPage = 0;
-  currentTasks: any = [];
-  TasksInPages: any = [];
-  result = "";
-  finishWithAllTask = false;
+let loading = false;
+let error: any;
+let tasks: TaskList = reactive({
+  statements: [],
+  itemsPerPage: 5,
+});
+let currentPage = ref(0);
+let currentTasks: any = [];
+let TasksInPages: any = [];
+let result = "";
+let finishWithAllTask = ref(false);
 
-  async fetchTasks(section: string) {
-    this.finishWithAllTask = false;
-    try {
-      this.loading = true;
-      const response = await fetch(
-        `http://192.168.178.28:3000/by_section/${section}`
-      );
-
-      const data = await response.json();
-      let newTask: task[] = [];
-      data.forEach((entry: any) => {
-        newTask.push(mapIntoTask(entry));
-      });
-      this.loading = false;
-      this.tasks.statements = newTask;
-      this.tasks.statements.forEach(
-        (statement) => (statement.isSelected = false)
-      );
-    } catch (err: any) {
-      this.error = err.message;
-      this.loading = false;
-    }
-    this.currentPage = 0;
-    this.TasksInPages = [];
-    this.splitIntoPages();
-    this.selectPage(this.currentPage);
-  }
-  nextPage() {
-    this.currentPage += 1;
-    this.selectPage(this.currentPage);
-  }
-
-  previousPage() {
-    this.currentPage -= 1;
-    this.selectPage(this.currentPage);
-  }
-  splitIntoPages() {
-    const pages = Math.ceil(
-      this.tasks.statements.length / this.tasks.itemsPerPage
+async function fetchTasks(section: string) {
+  finishWithAllTask.value = false;
+  try {
+    loading = true;
+    const response = await fetch(
+      `http://192.168.178.28:3000/by_section/${section}`
     );
-    console.log(pages);
-    for (let i = 0; i < pages; i++) {
-      const start = i * this.tasks.itemsPerPage;
-      const end = start + this.tasks.itemsPerPage;
-      const currentPage = this.tasks.statements.slice(start, end);
-      if (currentPage.length == this.tasks.itemsPerPage)
-        this.TasksInPages.push(currentPage);
-    }
-  }
-  selectPage(num: number) {
-    this.currentTasks = this.TasksInPages[num];
-  }
-  onSelectionChangend(selection: any) {
-    this.loading = true;
-    this.fetchTasks(selection).catch((error) => {
-      this.error = error;
-    });
-  }
-  SelectStatementToBeCorrect(taskpp: task) {
-    this.currentTasks.find((task: task) => task.id === taskpp.id);
 
-    if (taskpp.isSelected == true) {
-      taskpp.isSelected = false;
-    } else {
-      taskpp.isSelected = true;
-    }
-    console.log(taskpp);
+    const data = await response.json();
+    let newTask: task[] = [];
+    data.forEach((entry: any) => {
+      newTask.push(mapIntoTask(entry));
+    });
+    loading = false;
+    tasks.statements = newTask;
+    tasks.statements.forEach((statement) => (statement.isSelected = false));
+  } catch (err: any) {
+    error = err.message;
+    loading = false;
   }
-  evaluate() {
-    let pointCounter = 0;
-    let maxPoints = this.TasksInPages.length * 100;
-    this.TasksInPages.forEach((page: any) => {
-      let correctlyIdentified = 0;
-      page.forEach((statement: any) => {
-        if (statement.isSelected == statement.isCorrect) {
-          correctlyIdentified++;
-        }
-      });
-      console.log(page.length);
-      if (correctlyIdentified == page.length) {
-        pointCounter += 100;
-      } else if (correctlyIdentified == page.length - 1) {
-        pointCounter += 60;
-      } else if (correctlyIdentified == page.length - 2) {
-        pointCounter += 30;
-      } else if (correctlyIdentified == page.length - 3) {
-        pointCounter += 10;
-      } else if (correctlyIdentified == page.length - 4) {
-        pointCounter += 1;
+  currentPage.value = 0;
+  TasksInPages = [];
+  splitIntoPages();
+  selectPage(currentPage.value);
+}
+function nextPage() {
+  currentPage.value += 1;
+  selectPage(currentPage.value);
+}
+
+function previousPage() {
+  currentPage.value -= 1;
+  selectPage(currentPage.value);
+}
+function splitIntoPages() {
+  const pages = Math.floor(tasks.statements.length / tasks.itemsPerPage);
+  console.log(tasks.statements.length);
+  console.log(pages);
+  for (let i = 0; i < pages; i++) {
+    const start = i * tasks.itemsPerPage;
+    const end = start + tasks.itemsPerPage;
+    const currentPage = tasks.statements.slice(start, end);
+    if (currentPage.length == tasks.itemsPerPage)
+      TasksInPages.push(currentPage);
+  }
+}
+function selectPage(num: number) {
+  currentTasks = TasksInPages[num];
+}
+function onSelectionChangend(selection: any) {
+  loading = true;
+  fetchTasks(selection).catch((err) => {
+    error = err;
+  });
+}
+function SelectStatementToBeCorrect(taskpp: task) {
+  currentTasks.find((task: task) => task.id === taskpp.id);
+
+  if (taskpp.isSelected == true) {
+    taskpp.isSelected = false;
+  } else {
+    taskpp.isSelected = true;
+  }
+  console.log(taskpp);
+}
+function evaluate() {
+  let pointCounter = 0;
+  let maxPoints = TasksInPages.length * 100;
+  TasksInPages.forEach((page: any) => {
+    let correctlyIdentified = 0;
+    page.forEach((statement: any) => {
+      if (statement.isSelected == statement.isCorrect) {
+        correctlyIdentified++;
       }
     });
-    this.finishWithAllTask = true;
-    this.result = pointCounter + " out of " + maxPoints;
-    console.log(pointCounter + " out of " + maxPoints);
-  }
+    console.log(page.length);
+    if (correctlyIdentified == page.length) {
+      pointCounter += 100;
+    } else if (correctlyIdentified == page.length - 1) {
+      pointCounter += 60;
+    } else if (correctlyIdentified == page.length - 2) {
+      pointCounter += 30;
+    } else if (correctlyIdentified == page.length - 3) {
+      pointCounter += 10;
+    } else if (correctlyIdentified == page.length - 4) {
+      pointCounter += 1;
+    }
+  });
+  finishWithAllTask.value = true;
+  result = pointCounter + " out of " + maxPoints;
+  console.log(pointCounter + " out of " + maxPoints);
 }
 </script>

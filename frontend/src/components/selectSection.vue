@@ -19,9 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-import { def } from "@vue/shared";
 import { ref, onMounted, defineEmits } from "vue";
-import { task, mapIntoTask, TaskList } from "../../../types";
 
 type section = { section: string; id: string };
 let sections = ref<section[]>([]);
