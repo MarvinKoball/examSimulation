@@ -122,7 +122,7 @@ export default class AddTaskForm extends Vue {
 
   created() {
     console.log("AddTaskForm created");
-    fetch("http://http://192.168.178.28/:3000/").then(async (response) => {
+    fetch("http://http://192.168.178.28:3000/").then(async (response) => {
       console.log(await response.json());
       //this.testTask.pictureStream = "";
     });
