@@ -1,8 +1,9 @@
-import fastify from "fastify";
+import fastify from 'fastify';
 import cors from "@fastify/cors";
 import postgres from "@fastify/postgres";
 import { task } from "../../types/index";
 import "reflect-metadata";
+import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { AppDataSource } from "./data-source";
 import { addCodeArg } from "ajv/dist/compile/codegen/code";
 import { taskDto } from "./entity/taskDto";
@@ -10,20 +11,16 @@ import { subjectDto } from "./entity/subjectDto";
 import { sectionDto } from "./entity/sectionDto";
 import { examDto } from "./entity/examDto";
 import { taskTypeDto } from "./entity/taskTypeDto";
-import { SaveOptions, UpdateResult } from "typeorm";
+import { AfterRecover, FindManyOptions, SaveOptions, UpdateResult} from "typeorm";
 import { resolve } from "path";
-import { rejects } from "assert";
+import { equal, rejects } from "assert";
+import { request } from 'http';
 
-
-//dont forget: tsc -w :)
-const server = fastify();
+const server = require('fastify')();
 server.register(cors, {
   origin: true,
 });
-server.register(postgres, {
-  connectionString:
-    "postgres://postgres:mysecretpassword@0.0.0.0:5432/postgres", 
-});
+
 
 
 server.get("/", async (request, reply) => {
@@ -38,12 +35,50 @@ let newTask=taskDto.addNewTaskToDb(taskbody);
 reply.send({"message":"Saved a new task with id: "+(await newTask).id})
 
 })
+server.get("/sections", async( request, reply)=>{
+  const repository = AppDataSource.getRepository(sectionDto);
+  const results = await repository.find() as sectionDto[];
+  const stringOnlyResult:string[]=[]
+  results.forEach((result)=>{
+    stringOnlyResult.push(result.section)
+  })
+
+  reply.send(results)
+
+})
+server.get("/by_section/:section", {
+  schema: {
+    params: {
+      type: 'object',
+      properties: {
+        section: {
+          type: 'string'
+        }
+      }
+    }
+  }
+}, async (request:FastifyRequest, reply:FastifyReply) => {
+
+  console.log("incomming Request");
+  
+  
+  
+  const repository = AppDataSource.getRepository(taskDto);
+  const query= request.params as {section: string}
+  const qq= query.section;  
+  
+
+  const results = await repository.find({relations:{section: true, subject:true, exam:true, taskType:true, pictureStream:true}, where:{section:{section:qq}}});
+  console.log(results);
+  
+  reply.send(results);
+});
 
 
 // Run the server!
 const start = async () => {
   try {
-    await server.listen({ port: 3000 });
+    await server.listen({ port: 3000, host:'192.168.178.28'});
     AppDataSource.initialize().then(()=>{console.log("intialized")}).catch((err)=>{console.log(err.message)}); 
   } catch (err) {
     server.log.error(err);
@@ -87,4 +122,10 @@ super old
   } catch {
     reply.send({ message: "error" });
   }
+}); */
+
+
+/* server.register(postgres, {
+  connectionString:
+    "postgres://postgres:mysecretpassword@0.0.0.0:5432/postgres", 
 }); */

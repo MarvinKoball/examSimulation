@@ -122,7 +122,7 @@ export default class AddTaskForm extends Vue {
 
   created() {
     console.log("AddTaskForm created");
-    fetch("http://localhost:3000/").then(async (response) => {
+    fetch("http://http://192.168.178.28/:3000/").then(async (response) => {
       console.log(await response.json());
       //this.testTask.pictureStream = "";
     });
@@ -144,7 +144,7 @@ export default class AddTaskForm extends Vue {
 
   async uploadTask() {
     //console.log(this.testTask);
-    const result = await fetch("http://localhost:3000/add", {
+    const result = await fetch("http://192.168.178.28:3000/add", {
       headers: { "Content-Type": "application/json" },
       method: "POST",
       body: JSON.stringify(this.testTask),
