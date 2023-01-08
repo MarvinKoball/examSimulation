@@ -21,7 +21,7 @@
 <script lang="ts" setup>
 import { ref, onMounted, defineEmits } from "vue";
 
-type section = { section: string; id: string };
+type section = { section: string; id: number };
 let sections = ref<section[]>([]);
 let selected = ref();
 const emit = defineEmits(["selection-changed"]);

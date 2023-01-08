@@ -11,5 +11,7 @@ import AddTaskForm from "../components/AddTaskForm.vue";
 @Options({
   components: { AddTaskForm },
 })
-export default class HomeView extends Vue {}
+export default class HomeView extends Vue {
+  /*test*/
+}
 </script>
